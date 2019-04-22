@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+         利用谷歌云搭建FQ服务教程一览 - 查理不会冲浪的烂笔头 
+    </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="I'm Nobody">
+
+    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
+    <link rel="stylesheet" type="text/css" href="asset/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
+
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="查理不会冲浪的烂笔头">
+
+    <script src="asset/highlight.pack.js"></script>
+<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+</head>
+
+<body>
+    <header class="site-header cuckoo">
+        <div class="wrapper">
+            <a class="site-title" href="index.html">查理不会冲浪的烂笔头</a>
+            <nav class="site-nav">
+                <a href="#" class="menu-icon">
+                    <svg viewBox="0 0 18 15">
+                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+                    </svg>
+                </a>
+                <div class="trigger">
+                    
+                        <a class="page-link" href="index.html">Home</a>
+                    
+                        <a class="page-link" href="archives.html">Archives</a>
+                    
+                </div>
+            </nav>
+        </div>
+    </header>
+</body>
+
+</html>
+ <div class="page-content cuckoo">
+    <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+            <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">利用谷歌云搭建FQ服务教程一览</h1>
+                <div class="post-description">
+                    
+                </div>
+            </header>
+            <div class="post-content" itemprop="articleBody">
+                <p>I&#39;m Nobody. 我只是教程的搬运工。</p>
+
+<ul>
+<li>
+<a href="#toc_0">一、创建VM实例</a>
+</li>
+<li>
+<a href="#toc_1">二、安装加速工具</a>
+<ul>
+<li>
+<a href="#toc_2">1、 GitHub用户iyuco(Simon)的一键开启BBR脚本  http://www.iyu.co/</a>
+</li>
+<li>
+<a href="#toc_3">2、秋水逸冰的一键开启BBR脚本  https://teddysun.com/489.html</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_4">三、安装FQ工具</a>
+<ul>
+<li>
+<a href="#toc_5">1、目前很火的ShadowsocksR（SSR、酸酸乳）</a>
+</li>
+<li>
+<a href="#toc_6">2、小众FQ工具——Brook</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_7">四、创建或修改防火墙规则</a>
+</li>
+<li>
+<a href="#toc_8">五、重启机器</a>
+</li>
+<li>
+<a href="#toc_9">六、配置客户端</a>
+</li>
+</ul>
+
+
+<h2 id="toc_0">一、创建VM实例</h2>
+
+<ul>
+<li>1）、首先打开谷歌云服务网站 <a href="https://cloud.google.com/">https://cloud.google.com/</a>   并进入控制台。</li>
+<li>2）、展开侧边栏菜单，选择 <code>Compute Engine</code>——<code>VM实例</code></li>
+<li><p>3）、点击<code>创建实例</code>，会出现以下选项，加粗的需要注意修改：</p>
+<blockquote>
+<ul>
+<li><strong>地区</strong>-注意选择亚洲等地区，试了一个亚洲东部，traceroute以后发现服务器在台湾，速度不错就没再换。</li>
+<li><strong>机器类型</strong>-注意修改为<code>微型（1个共享vCPU）</code>，也就是最低的配置即可，此时发现最右侧的估值约5刀/月。</li>
+<li>容器-默认不用勾选</li>
+<li><strong>启动磁盘</strong>-按个人习惯配置即可，个人一直用Center OS 7，跑那些一键脚本暂时没发现问题</li>
+<li>身份和 API 访问权限-默认不用修改</li>
+<li><strong>防火墙</strong>-勾选<code>允许HTTP流量</code>，<code>允许HTTPS流量</code></li>
+<li>下面收起的<code>管理</code>，<code>磁盘</code>，<code>网络</code>，<code>SSH密钥</code>都不用管，默认即可。</li>
+</ul>
+</blockquote></li>
+<li><p>4）、最后点击<code>创建</code>按钮，等待创建完成即可。</p></li>
+<li><p>5）、创建完成的VM实例，会有个外部ip，控制台里连续ping一下，先看看延迟和丢包如何，如果能接受就在这里 <a href="https://www.ipip.net/traceroute.php">https://www.ipip.net/traceroute.php</a> 测试一下traceroute，看看服务器归属地和中间有没有绕路。</p></li>
+</ul>
+
+<h2 id="toc_1">二、安装加速工具</h2>
+
+<p>加速工具有很多，但是普遍用的最多就是锐速、BBR、和KCPTun。</p>
+
+<blockquote>
+<p>KCPTun因为是双端加速，一般来说速度是最好的，但是似乎没有手机和路由等终端的软件，暂时就放弃了。</p>
+
+<p>单端加速里，锐速是收费软件，但是有破解版。然而破解版对系统内核有比较严格的要求，我这种弱鸡在弄一些供应商的vps时修改不成功，总之个人觉得比较麻烦，后来也不用了</p>
+
+<p>BBR就是Google开源的TCP BBR拥塞控制算法，最新的系统好多都直接开启了，系统兼容的也比较宽泛。加速效果和锐速相比不相伯仲，不过有些vps可能锐速更好，有些vps可能BBR更好，也不折腾另外两种了，直接BBR了就。</p>
+</blockquote>
+
+<p>通过SSH连接之前创建好的VM实例，可以直接点击之前创建的VM实例的<code>连接</code>那列的<code>SSH</code>按钮，直接打开SSH窗口；或者通过下拉菜单选择其他选项连接。<br/>
+<mark><strong>谷歌云的机器连接以后默认不是root用户，所以先切换到root，保证后面的一键脚本都能顺利运行，执行下面的指令切换到root用户</strong></mark></p>
+
+<pre><code class="language-text">sudo -i
+</code></pre>
+
+<p><mark><strong>以下加速器安装脚本二选一安装即可</strong></mark></p>
+
+<h3 id="toc_2">1、 GitHub用户iyuco(Simon)的一键开启BBR脚本  <a href="http://www.iyu.co/">http://www.iyu.co/</a></h3>
+
+<p>执行下面的一键脚本</p>
+
+<pre><code class="language-text">wget --no-check-certificate https://github.com/iyuco/scripts/raw/master/bbr.sh
+chmod +x bbr.sh
+./bbr.sh
+</code></pre>
+
+<p><strong>这里如果提示</strong><code>wget not found</code>，那就先执行下面的指令安装wget</p>
+
+<pre><code class="language-text">yum install -y wget
+</code></pre>
+
+<p><strong>启动bbr.sh脚本后，会询问”按任意键开始，或者Control + C“取消，这里随便按个键开始即可</strong></p>
+
+<blockquote>
+<p><strong>脚本执行完成后会询问是否<code>reboot</code>（重启机器），这里建议暂时不要重启，最后安装完FQ软件后一并重启，即输入 <code>n</code> 即可</strong></p>
+</blockquote>
+
+<h3 id="toc_3">2、秋水逸冰的一键开启BBR脚本  <a href="https://teddysun.com/489.html">https://teddysun.com/489.html</a></h3>
+
+<p>秋大的脚本没有在谷歌云上测试，在vultr和linode上都没啥问题，暂时做个备份</p>
+
+<p>步骤直接copy过来了，也可以从上面的网址查看步骤</p>
+
+<p>使用root用户登录，运行以下命令：</p>
+
+<pre><code class="language-text">wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh &amp;&amp; chmod +x bbr.sh &amp;&amp; ./bbr.sh
+</code></pre>
+
+<blockquote>
+<p><strong>这里如果提示</strong><code>wget not found</code>，那就先执行下面的指令安装wget</p>
+
+<pre><code class="language-text">yum install -y wget
+</code></pre>
+</blockquote>
+
+<p>安装完成后，脚本会提示需要重启 VPS，输入 y 并回车后重启。 重启完成后，进入 VPS，验证一下是否成功安装最新内核并开启 TCP BBR，输入以下命令：</p>
+
+<pre><code class="language-text">uname -r
+</code></pre>
+
+<p>查看内核版本，显示为最新版就表示 OK 了</p>
+
+<pre><code class="language-text">sysctl net.ipv4.tcp_available_congestion_control
+</code></pre>
+
+<p>返回值一般为： net.ipv4.tcp_available_congestion_control = bbr cubic reno</p>
+
+<pre><code class="language-text">sysctl net.ipv4.tcp_congestion_control
+</code></pre>
+
+<p>返回值一般为： net.ipv4.tcp_congestion_control = bbr</p>
+
+<pre><code class="language-text">sysctl net.core.default_qdisc
+</code></pre>
+
+<p>返回值一般为：<br/>
+ net.core.default_qdisc = fq</p>
+
+<pre><code class="language-text">lsmod | grep bbr
+</code></pre>
+
+<p>返回值有 tcp_bbr 模块即说明 bbr 已启动。注意：并不是所有的 VPS 都会有此返回值，若没有也属正常。</p>
+
+<hr/>
+
+<p><strong>至此加速器安装完毕。</strong></p>
+
+<h2 id="toc_4">三、安装FQ工具</h2>
+
+<p><mark>FQ的工具依旧推荐两个，可以同时安装、运行，但是不能使用相同的端口</mark></p>
+
+<h3 id="toc_5">1、目前很火的ShadowsocksR（SSR、酸酸乳）</h3>
+
+<p>ss和ssr的作者被请喝茶什么的这里就不说了。最早接触这个东西的，其实是为了玩儿游戏，不知道作者的初衷是啥，反正ShadowsocksR开始支持了udp转发，这被一些人发现可以用作游戏加速，因为在大型多人联机游戏（例如：男朋友、cod，全境封锁等等）中，游戏开发商为了降低网络延迟，大多在游戏登录阶段使用更安全的tcp协议通信，而在游戏过程中则使用更加高效的udp协议进行通信。而那段时间，国内的主机网络环境非常差，同期xbox one和ps 4玩家几乎都被硬生生逼成了网络高手，寻找各路DNS用以能够玩儿游戏，而困扰国内主机玩家很久的问题找到了这样一个突破口，一大波人也嗅探了商机，做起了游戏加速的生意，在淘宝也算风生水起。这也导致了后来ss部分加密混淆模式被侦测出特征，遭到大批量封杀。目前来看，较高级的一些加密算法依旧没啥问题，只要不是大量用户同时使用，基本很稳，个人在这次开会期间，vultr和linode的机器一直没关机，也挺过来了。但是用的人越多，被和谐的概率也会越高。</p>
+
+<p>回归正题，这里依旧使用秋大的一键脚本。<a href="https://teddysun.com/486.html">https://teddysun.com/486.html</a><br/>
+<mark><strong>依旧root用户下运行</strong></mark></p>
+
+<pre><code class="language-text">wget --no-check-certificate -O shadowsocks-all.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-all.sh
+chmod +x shadowsocks-all.sh
+./shadowsocks-all.sh 2&gt;&amp;1 | tee shadowsocks-all.log
+</code></pre>
+
+<p><strong>安装过程中选择<code>ShadowsocksR</code>，密码和端口自行设置，加密方式个人一直使用<code>rc4-md5</code>，协议<code>origin</code>，混淆<code>plain</code>。</strong></p>
+
+<p>如果你有一张互联网定向免流量的手机卡，混淆这里还可以自定义配置，以达到免流效果。不过现在一是流量越来越便宜，二来被和谐的越来越多，也就没那么大必要折腾了。</p>
+
+<p><strong>如果你本地已经安装过客户端，这时候配置好以后会发现无法使用。因为谷歌云需要修改防火墙规则，这个放在最后介绍。</strong></p>
+
+<p><strong>其他操作备注</strong></p>
+
+<p><strong>卸载方法</strong> </p>
+
+<blockquote>
+<p>若已安装多个版本，则卸载时也需多次运行（每次卸载一种）<br/>
+使用root用户登录，运行以下命令：<br/>
+<code>./shadowsocks-all.sh uninstall</code></p>
+</blockquote>
+
+<p><strong>启动脚本</strong> </p>
+
+<blockquote>
+<ul>
+<li>启动脚本后面的参数含义，从左至右依次为：启动，停止，重启，查看状态。</li>
+<li>Shadowsocks-Python 版：   <code>/etc/init.d/shadowsocks-python start | stop | restart | status</code></li>
+<li>ShadowsocksR 版：     <code>/etc/init.d/shadowsocks-r start | stop | restart | status</code></li>
+<li>Shadowsocks-Go 版：   <code>/etc/init.d/shadowsocks-go start | stop | restart | status</code></li>
+<li>Shadowsocks-libev 版：    <code>/etc/init.d/shadowsocks-libev start | stop | restart | status</code></li>
+</ul>
+</blockquote>
+
+<p><strong>各版本默认配置文件</strong> </p>
+
+<blockquote>
+<ul>
+<li>Shadowsocks-Python 版： <code>/etc/shadowsocks-python/config.json</code></li>
+<li>ShadowsocksR 版： <code>/etc/shadowsocks-r/config.json</code></li>
+<li>Shadowsocks-Go 版： <code>/etc/shadowsocks-go/config.json</code></li>
+<li>Shadowsocks-libev 版： <code>/etc/shadowsocks-libev/config.json</code></li>
+</ul>
+</blockquote>
+
+<p>同一个端口是可以给多个终端使用的，而如果害怕干扰，也可以自行修改config.json文件配置多个端口，这里暂时不介绍了</p>
+
+<h3 id="toc_6">2、小众FQ工具——Brook</h3>
+
+<p>Brook是Github用户<code>txthinking</code>开源的一款跨平台Socks5代理软件，项目地址： <a href="https://github.com/txthinking/brook">https://github.com/txthinking/brook</a></p>
+
+<p>和SSR对比，个人认为速度上Brook似乎更快一些，但至少是不会慢，比较小众，被和谐的概率更低。缺点也比较明显，由于是跨平台编译的软件，各个平台都不是native开发，导致客户端都不太好用，配置稍稍有些麻烦。其次作者刚刚开始支持路由器openwrt系统，梅林还没有很好的解决方案，好在Brook和SSR可以在同一台vps上同时开启。目前我电脑上也是以Brook为主，手机上SSR为主，路由器因为是梅林固件，所以只装了SSR。</p>
+
+<p>步入正题，这里使用的逗比网的一键脚本 <a href="https://doub.io/brook-jc3/">https://doub.io/brook-jc3/</a></p>
+
+<p>root用户下执行</p>
+
+<pre><code class="language-text">wget -N --no-check-certificate https://softs.fun/Bash/brook.sh &amp;&amp; chmod +x brook.sh &amp;&amp; bash brook.sh
+</code></pre>
+
+<p>如果这个脚本失效了，就使用下面的备用脚本</p>
+
+<pre><code class="language-text">wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/brook.sh &amp;&amp; chmod +x brook.sh &amp;&amp; bash brook.sh
+</code></pre>
+
+<blockquote>
+<ul>
+<li><strong>安装 Brook</strong></li>
+<li><strong>输入端口号，注意不要和SSR的重复</strong></li>
+<li><strong>输入密码，可以重复</strong></li>
+<li><strong>协议选择Brook（新版协议）</strong></li>
+</ul>
+</blockquote>
+
+<p>等待安装完成即可。</p>
+
+<p><strong>如果你本地已经安装过客户端，这时候配置好以后会发现无法使用。因为谷歌云需要修改防火墙规则，这个放在最后介绍。</strong></p>
+
+<p><strong>其他操作备注：</strong></p>
+
+<blockquote>
+<ul>
+<li><p>进入下载脚本的目录并运行脚本：<code>./brook.sh</code></p></li>
+<li><p>Brook操作<br/>
+启动：<code>/etc/init.d/brook start</code><br/>
+停止：<code>/etc/init.d/brook stop</code><br/>
+重启：<code>/etc/init.d/brook restart</code><br/>
+查看状态：<code>/etc/init.d/brook status</code><br/>
+安装目录：<code>/usr/local/brook</code><br/>
+配置文件：<code>/usr/local/brook/brook.conf</code><br/>
+日志文件：<code>/usr/local/brook/brook.log</code>（注意正常情况下，日志是不会记录使用信息的，只会记录报错）</p></li>
+</ul>
+</blockquote>
+
+<h2 id="toc_7">四、创建或修改防火墙规则</h2>
+
+<p>谷歌云和其他的vps不太一样，需要手动修改防火墙规则。</p>
+
+<blockquote>
+<ul>
+<li>1、点击左上角的<code>菜单键</code>，展开菜单</li>
+<li>2、找到<code>网络</code>，<code>VPC网络</code>，点击<code>防火墙规则</code></li>
+<li><strong>3、注意：默认的防火墙规则不要删除也不要修改，否则后果自负…</strong></li>
+<li>4、点击<code>创建防火墙规则</code></li>
+<li><p>5、</p>
+<ul>
+<li><code>名称</code>:随意</li>
+<li><code>网络</code>:默认default即可</li>
+<li><code>优先级</code>:默认1000即可</li>
+<li><code>流量方向</code>:入站</li>
+<li><code>对匹配项执行的操作</code>:允许</li>
+<li><code>目标</code>:指定的目标标记</li>
+<li><code>目标标记</code>:http-server</li>
+<li><code>来源过滤</code>:IP地址范围</li>
+<li><code>来源ip地址范围</code>:0.0.0.0/0</li>
+<li><code>次要来源过滤条件</code>:无</li>
+<li><code>协议和端口</code>:指定的协议和端口，编辑框里填写：<code>tcp:ss或者brook端口;udp:ss或者brook端口</code>。<strong>例如：你的ss或者brook端口是123，那这里就填写:<code>tcp:123;udp:123</code>，冒号和分号都是英文半角</strong></li>
+</ul></li>
+<li><p>6、点击<code>创建</code>按钮</p></li>
+<li><p>7、重复4~6操作，其中第5步里目标标记设置<code>https-server</code></p></li>
+<li><p>8、搞定</p></li>
+</ul>
+</blockquote>
+
+<h2 id="toc_8">五、重启机器</h2>
+
+<p>命令行输入<code>reboot</code>,等待完成重启即可。</p>
+
+<h2 id="toc_9">六、配置客户端</h2>
+
+<p>GUI客户端超级多，由于我平时主力机器是mac os，<br/>
+SSR我选择的是这个ShadowsocksX-NG-R  <a href="https://github.com/qinyuhang/ShadowsocksX-NG-R/releases">https://github.com/qinyuhang/ShadowsocksX-NG-R/releases</a></p>
+
+<p>Brook的则没有太多选择 <a href="https://github.com/txthinking/brook/releases">https://github.com/txthinking/brook/releases</a></p>
+
+<p>对于SSR来说，配置好服务器ip，端口，加密模式，协议和混淆；Brook设置一下ip、端口和密码，然后就可以开始玩耍了。至于不同模式的区别大家自行百度吧。</p>
+
+<p><strong>这里着重说一下手动模式配合Chrome浏览器的SwitchyOmega的解决方案</strong></p>
+
+<p>ShadowsocksX的其他模式和Brook的默认设置都会将代理写入系统设置中，系统所有软件都会走这套逻辑，虽然有ShadowsocksX有pac模式，可以自动分流，只有被墙的网站才使用代理，其他都直连。但是对于在特殊的企业上班的同学，公司都有自己的pac，用来访问内网的一些东西。如此一来只能每次都去手动修改，很是麻烦。而SwitchyOmega基本上能解决这个问题。</p>
+
+<p>首先在Chrome商店安装SwitchyOmega，然后ShadowsocksX设置手动模式，Brook在设置中关闭<code>set the system proxy automatically</code>，如果之前启动过，需要系统代理中，去掉被Brook设置的代理.</p>
+
+<p>然后在SwitchyOmega中新建情景模式，名称随便，例如：proxy。情景模式类型选择:<code>代理服务器</code>，创建。</p>
+
+<p><u>代理服务器这种情景模式下，浏览器所有的请求都会走代理。</u></p>
+
+<p><strong>如果安装的是ShadowsocksX-NG-R</strong></p>
+
+<blockquote>
+<ul>
+<li>代理协议选择http，代理服务器一栏填写：<code>127.0.0.1</code>，端口：<code>1087</code>，其他GUI可能使用不同的端口，自行调整。高级选项中全部同默认即可。</li>
+</ul>
+</blockquote>
+
+<p>最后点击左侧<code>应用选项</code>按钮。</p>
+
+<p><u>此处代理协议也可以选择Socks5，对应的端口则是<code>1086</code>，此端口可以在高级设置中修改。但不要和Brook的端口<code>1080</code>冲突</u></p>
+
+<p><strong>如果安装的是Brook</strong></p>
+
+<blockquote>
+<ul>
+<li>代理协议选择Socks5，代理服务器一栏填写：<code>127.0.0.1</code>，端口：<code>1080</code>，<mark><del>Brook暂时并不支持修改这个端口号，也有可能是我不知道怎么修改。</del></mark></li>
+</ul>
+
+<p><mark>update:目前brook mac 客户端更新了类似SSR的几种模式，包括：全局、白名单、黑名单、pac、手动几种模式；同时支持手动修改本地端口号</mark></p>
+</blockquote>
+
+<p>SwitchyOmega还有其他几种情景模式，pac模式可以导入你已有的pac代理规则，自动切换模式则可以根据你设置的规则列表网站，自动切换使用其他的情景模式，比如刚刚新建的浏览器全局代理，或者系统直连或者pac模式等等。而规则列表网址一般用这个gfwlist即可：<a href="https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt">https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt</a><br/>
+这里有绝大部分被和谐的网址，如果有自己的需求，也可以通过SwitchyOmega自行添加，总之SwitchyOmega是一个很厉害的工具，还有很多玩法就不一一介绍了。</p>
+
+<p>Enjoy!</p>
+
+            </div>
+            <div>
+                <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://nobody-update.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                
+                
+            </div>
+        </article>
+    </div>
+</div>
+
+<script src="asset/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#footer').show()
+    })
+</script>
+  <footer id="footer" class="cuckoo page-footer" style="display: none">
+    <div class="wrapper">
+        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+    </div>
+</footer>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
