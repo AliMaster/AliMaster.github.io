@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+         腾讯 Xlog 入坑总结 - 查理不会冲浪的烂笔头 
+    </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="I'm Nobody">
+
+    <link rel="stylesheet" type="text/css" href="asset/cuckoo.css">
+    <link rel="stylesheet" type="text/css" href="asset/main.css">
+    <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
+
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="查理不会冲浪的烂笔头">
+
+    <script src="asset/highlight.pack.js"></script>
+<!--    <script>hljs.initHighlightingOnLoad();</script>-->
+</head>
+
+<body>
+    <header class="site-header cuckoo">
+        <div class="wrapper">
+            <a class="site-title" href="index.html">查理不会冲浪的烂笔头</a>
+            <nav class="site-nav">
+                <a href="#" class="menu-icon">
+                    <svg viewBox="0 0 18 15">
+                        <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+                        <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+                        <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+                    </svg>
+                </a>
+                <div class="trigger">
+                    
+                        <a class="page-link" href="index.html">Home</a>
+                    
+                        <a class="page-link" href="archives.html">Archives</a>
+                    
+                </div>
+            </nav>
+        </div>
+    </header>
+</body>
+
+</html>
+ <div class="page-content cuckoo">
+    <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+            <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">腾讯 Xlog 入坑总结</h1>
+                <div class="post-description">
+                    
+                </div>
+            </header>
+            <div class="post-content" itemprop="articleBody">
+                <p>最近项目中终于接入了腾讯微信开源项目 mars （ <a href="https://github.com/Tencent/mars">https://github.com/Tencent/mars</a> ）中的 Xlog 组件，由于官方文档说明有限，且在使用过程中遇到了一些问题，所以特地拜读了一下源码，摘录一些关键的问题和细节，如果错误劳驾指正，谢谢。</p>
+
+<h2 id="toc_0">一、本地编译so</h2>
+
+<h3 id="toc_1">修改加密方式</h3>
+
+<p>参考wiki修改 <a href="https://github.com/Tencent/mars/wiki/Mars-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%89%A9%E5%B1%95">https://github.com/Tencent/mars/wiki/Mars-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%89%A9%E5%B1%95</a></p>
+
+<h3 id="toc_2">修改加密密钥</h3>
+
+<p>1、本地生成rsa密钥<br/>
+2、修改<code>./mars/mars/log/crypt/decode_mars_crypt_log_file.py</code>文件中的<code>PRIV_KEY</code>为私钥，<code>PUB_KEY</code>为公钥<br/>
+3、cd到 <code>./mars/mars</code>下，运行<code>build_xxx.py</code>文件，进入编译工具，xxx为你的平台。</p>
+
+<h3 id="toc_3">安卓修改编译不同CPU架构的so</h3>
+
+<p>1、修改<code>./mars/mars/build_android.py</code>，将&#39;__main__&#39;方法中的<code>archs</code>变量配置需要的CPU架构即可，例如：<code>archs = set([&#39;armeabi&#39;,&#39;arm64-v8a&#39;])</code><br/>
+2、cd到 <code>./mars/mars</code>下，运行<code>build_android.py</code>文件，进入编译工具</p>
+
+<h2 id="toc_4">二、自动清理功能</h2>
+
+<p>有，但是截止至tag_v1.3.0存在bug。</p>
+
+<p>具体逻辑：</p>
+
+<ul>
+<li>首先，在<code>appender.cc</code>的Xlog入口方法 <code>appender_open_with_cache</code>中，创建了一个延迟2分钟执行的线程，调用<code>__del_timeout_file</code>方法，删除<code>cachedir</code>目录下最后修改时间超过当下<code>sg_max_alive_time</code>（默认10天，参考<code>kMaxLogAliveTime</code>，可以通过Xlog.setMaxAliveTime(long)方法设置成超过10天的时长，设置小于10天无效）时长的<code>xlog</code>后缀文件。</li>
+<li>然后再创建一个延迟3分钟执行的线程，调用<code>__move_old_files</code>方法，将<code>cachedir</code>目录下最后修改时间超过当下<code>sg_cache_log_days</code>（ 通过<code>appender_open_with_cache</code>入参<code>_cache_days</code>设置）天的xlog文件移动到<code>_logdir</code>目录下。默认设置0的话，mmap文件会在<code>cachedir</code>下，xlog文件直接在<code>logdir</code>目录下</li>
+<li>同第一步，在紧接着调用的 <code>appender_open</code>方法中，创建一个延迟2分钟执行的线程，调用<code>__move_old_files</code>方法，将<code>_logdir</code>目录下最后修改时间超过当下当下<code>sg_max_alive_time</code>时长的<code>xlog</code>后缀文件删除。而目前正是此步骤有问题，参考 <a href="https://github.com/Tencent/mars/issues/570">https://github.com/Tencent/mars/issues/570</a> 修复</li>
+</ul>
+
+<h2 id="toc_5">三、mmap 内存阈值</h2>
+
+<p>50KB 。</p>
+
+<p>参考变量 <code>apender.cc</code>中的变量<code>kBufferBlockLength = 150 * 1024</code> ， 在<code>__appender_async</code> 方法中使用时，超过三分之大小（即50KB）时，会将mmap推送到xlog中，然后重置mmap（参考 <code>__async_log_thread</code>中<code>sg_log_buff-&gt;Flush(tmp);</code>行，此LogBuffer.Flush(AutoBuffer)方法的具体实现中，查看<code>log.buffer.cc</code>文件中的对应方法，最后会<code>__Clear()</code>）。</p>
+
+<h2 id="toc_6">四、xlog 文件大小和个数限制</h2>
+
+<p>可以通过Xlog.setMaxFileSize(long)方法来设置单个xlog文件大小，超过此大小后分片存储。xlog 是先写入，后判断文件大小，会有一定误差。<br/>
+xlog文件无数量限制。</p>
+
+            </div>
+            <div>
+                <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://nobody-update.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                
+                
+            </div>
+        </article>
+    </div>
+</div>
+
+<script src="asset/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#footer').show()
+    })
+</script>
+  <footer id="footer" class="cuckoo page-footer" style="display: none">
+    <div class="wrapper">
+        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+    </div>
+</footer>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
