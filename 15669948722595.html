@@ -3,7 +3,7 @@
 
 <head>
     <title>
-         记一次 jdk 版本导致的编译问题 - 查理不会冲浪的烂笔头 
+         记一次 jdk 版本导致的编译问题 - 妙妙屋 
     </title>
 
     <meta charset="UTF-8">
@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="asset/main.css">
     <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
 
-    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="查理不会冲浪的烂笔头">
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="妙妙屋">
 
     <script src="asset/highlight.pack.js"></script>
 <!--    <script>hljs.initHighlightingOnLoad();</script>-->
@@ -23,7 +23,7 @@
 <body>
     <header class="site-header cuckoo">
         <div class="wrapper">
-            <a class="site-title" href="index.html">查理不会冲浪的烂笔头</a>
+            <a class="site-title" href="index.html">妙妙屋</a>
             <nav class="site-nav">
                 <a href="#" class="menu-icon">
                     <svg viewBox="0 0 18 15">
@@ -57,7 +57,7 @@
             <div class="post-content" itemprop="articleBody">
                 <p>今天在调试 gradle 打包脚本，从 Console 里输入命令后发现报错具体如下</p>
 
-<pre><code class="language-text">Execution failed for task &#39;:qrcomiclib:greendao&#39;.
+<pre class="line-numbers"><code class="language-text">Execution failed for task &#39;:qrcomiclib:greendao&#39;.
 &gt; Found 2 problem(s) parsing &quot;xxx/xxx.java&quot;. First problem:
   Pb(324) The type java.lang.Object cannot be resolved. It is indirectly referenced from required .class files (16777540 at line 1).
   Run gradle with --info for more details.
@@ -65,7 +65,7 @@
 
 <p>具体出错堆栈</p>
 
-<pre><code class="language-text">java.lang.RuntimeException: Found 2 problem(s) parsing &quot;xxx/xxx.java&quot;. First problem:
+<pre class="line-numbers"><code class="language-text">java.lang.RuntimeException: Found 2 problem(s) parsing &quot;xxx/xxx.java&quot;. First problem:
 Pb(324) The type java.lang.Object cannot be resolved. It is indirectly referenced from required .class files (16777540 at line 1).
 Run gradle with --info for more details.
         at org.greenrobot.greendao.codemodifier.EntityClassParser.parse(EntityClassParser.kt:72)
@@ -111,15 +111,15 @@ Run gradle with --info for more details.
 
 <p>之后我看了一下Android Studio 的 JVM 设置，查看 <code>file/Project Structure.../SDK Location/JDK location</code>（mac 版 Android Studio 3.5 版本，其他系统和版本可能略有不同）<br/>
 赫然发现 AS 用的是内置的 JDK<br/>
-<figure><img src="media/15669948722595/15669967700100.jpg" alt="" style="width:1659px;"/></figure></p>
+<img src="media/15669948722595/15669967700100.jpg" alt="" style="width:1659px;"/></p>
 
 <p>熟悉 mac 的同学一定知道这个是 app 的安装包目录，cd 到这个目录下以后查看 jdk 版本</p>
 
-<p><figure><img src="media/15669948722595/15669969756152.jpg" alt="" style="width:1142px;"/></figure></p>
+<p><img src="media/15669948722595/15669969756152.jpg" alt="" style="width:1142px;"/></p>
 
 <p>而我自己因前几天刚刚新装的机器，直接安装的 jdk 12</p>
 
-<p><figure><img src="media/15669948722595/15669970292144.jpg" alt=""/></figure></p>
+<p><img src="media/15669948722595/15669970292144.jpg" alt=""/></p>
 
 <p>之后去 oracle 官网下载了 jdk 1.8.0_221 版本后，再从 Console 里运行脚本<br/>
 一切正常了…… <br/>
@@ -164,8 +164,8 @@ s.setAttribute('data-timestamp', +new Date());
 </script>
   <footer id="footer" class="cuckoo page-footer" style="display: none">
     <div class="wrapper">
-        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+        <p>Contact Me : <a href="mailto:jianweiao@foxmail.com">AliMaster</a></p>
     </div>
 </footer>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_SVG-full"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
 

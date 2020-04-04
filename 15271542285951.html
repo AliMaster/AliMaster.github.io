@@ -3,7 +3,7 @@
 
 <head>
     <title>
-         利用谷歌云搭建FQ服务教程一览 - 查理不会冲浪的烂笔头 
+         利用谷歌云搭建FQ服务教程一览 - 妙妙屋 
     </title>
 
     <meta charset="UTF-8">
@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="asset/main.css">
     <link rel="stylesheet" type="text/css" href="asset/atom-one-light.css">
 
-    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="查理不会冲浪的烂笔头">
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="妙妙屋">
 
     <script src="asset/highlight.pack.js"></script>
 <!--    <script>hljs.initHighlightingOnLoad();</script>-->
@@ -23,7 +23,7 @@
 <body>
     <header class="site-header cuckoo">
         <div class="wrapper">
-            <a class="site-title" href="index.html">查理不会冲浪的烂笔头</a>
+            <a class="site-title" href="index.html">妙妙屋</a>
             <nav class="site-nav">
                 <a href="#" class="menu-icon">
                     <svg viewBox="0 0 18 15">
@@ -131,7 +131,7 @@
 <p>通过SSH连接之前创建好的VM实例，可以直接点击之前创建的VM实例的<code>连接</code>那列的<code>SSH</code>按钮，直接打开SSH窗口；或者通过下拉菜单选择其他选项连接。<br/>
 <mark><strong>谷歌云的机器连接以后默认不是root用户，所以先切换到root，保证后面的一键脚本都能顺利运行，执行下面的指令切换到root用户</strong></mark></p>
 
-<pre><code class="language-text">sudo -i
+<pre class="line-numbers"><code class="language-text">sudo -i
 </code></pre>
 
 <p><mark><strong>以下加速器安装脚本二选一安装即可</strong></mark></p>
@@ -140,14 +140,14 @@
 
 <p>执行下面的一键脚本</p>
 
-<pre><code class="language-text">wget --no-check-certificate https://github.com/iyuco/scripts/raw/master/bbr.sh
+<pre class="line-numbers"><code class="language-text">wget --no-check-certificate https://github.com/iyuco/scripts/raw/master/bbr.sh
 chmod +x bbr.sh
 ./bbr.sh
 </code></pre>
 
 <p><strong>这里如果提示</strong><code>wget not found</code>，那就先执行下面的指令安装wget</p>
 
-<pre><code class="language-text">yum install -y wget
+<pre class="line-numbers"><code class="language-text">yum install -y wget
 </code></pre>
 
 <p><strong>启动bbr.sh脚本后，会询问”按任意键开始，或者Control + C“取消，这里随便按个键开始即可</strong></p>
@@ -164,40 +164,40 @@ chmod +x bbr.sh
 
 <p>使用root用户登录，运行以下命令：</p>
 
-<pre><code class="language-text">wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh &amp;&amp; chmod +x bbr.sh &amp;&amp; ./bbr.sh
+<pre class="line-numbers"><code class="language-text">wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh &amp;&amp; chmod +x bbr.sh &amp;&amp; ./bbr.sh
 </code></pre>
 
 <blockquote>
 <p><strong>这里如果提示</strong><code>wget not found</code>，那就先执行下面的指令安装wget</p>
 
-<pre><code class="language-text">yum install -y wget
+<pre class="line-numbers"><code class="language-text">yum install -y wget
 </code></pre>
 </blockquote>
 
 <p>安装完成后，脚本会提示需要重启 VPS，输入 y 并回车后重启。 重启完成后，进入 VPS，验证一下是否成功安装最新内核并开启 TCP BBR，输入以下命令：</p>
 
-<pre><code class="language-text">uname -r
+<pre class="line-numbers"><code class="language-text">uname -r
 </code></pre>
 
 <p>查看内核版本，显示为最新版就表示 OK 了</p>
 
-<pre><code class="language-text">sysctl net.ipv4.tcp_available_congestion_control
+<pre class="line-numbers"><code class="language-text">sysctl net.ipv4.tcp_available_congestion_control
 </code></pre>
 
 <p>返回值一般为： net.ipv4.tcp_available_congestion_control = bbr cubic reno</p>
 
-<pre><code class="language-text">sysctl net.ipv4.tcp_congestion_control
+<pre class="line-numbers"><code class="language-text">sysctl net.ipv4.tcp_congestion_control
 </code></pre>
 
 <p>返回值一般为： net.ipv4.tcp_congestion_control = bbr</p>
 
-<pre><code class="language-text">sysctl net.core.default_qdisc
+<pre class="line-numbers"><code class="language-text">sysctl net.core.default_qdisc
 </code></pre>
 
 <p>返回值一般为：<br/>
  net.core.default_qdisc = fq</p>
 
-<pre><code class="language-text">lsmod | grep bbr
+<pre class="line-numbers"><code class="language-text">lsmod | grep bbr
 </code></pre>
 
 <p>返回值有 tcp_bbr 模块即说明 bbr 已启动。注意：并不是所有的 VPS 都会有此返回值，若没有也属正常。</p>
@@ -217,7 +217,7 @@ chmod +x bbr.sh
 <p>回归正题，这里依旧使用秋大的一键脚本。<a href="https://teddysun.com/486.html">https://teddysun.com/486.html</a><br/>
 <mark><strong>依旧root用户下运行</strong></mark></p>
 
-<pre><code class="language-text">wget --no-check-certificate -O shadowsocks-all.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-all.sh
+<pre class="line-numbers"><code class="language-text">wget --no-check-certificate -O shadowsocks-all.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-all.sh
 chmod +x shadowsocks-all.sh
 ./shadowsocks-all.sh 2&gt;&amp;1 | tee shadowsocks-all.log
 </code></pre>
@@ -273,12 +273,12 @@ chmod +x shadowsocks-all.sh
 
 <p>root用户下执行</p>
 
-<pre><code class="language-text">wget -N --no-check-certificate https://softs.fun/Bash/brook.sh &amp;&amp; chmod +x brook.sh &amp;&amp; bash brook.sh
+<pre class="line-numbers"><code class="language-text">wget -N --no-check-certificate https://softs.fun/Bash/brook.sh &amp;&amp; chmod +x brook.sh &amp;&amp; bash brook.sh
 </code></pre>
 
 <p>如果这个脚本失效了，就使用下面的备用脚本</p>
 
-<pre><code class="language-text">wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/brook.sh &amp;&amp; chmod +x brook.sh &amp;&amp; bash brook.sh
+<pre class="line-numbers"><code class="language-text">wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/brook.sh &amp;&amp; chmod +x brook.sh &amp;&amp; bash brook.sh
 </code></pre>
 
 <blockquote>
@@ -428,8 +428,8 @@ s.setAttribute('data-timestamp', +new Date());
 </script>
   <footer id="footer" class="cuckoo page-footer" style="display: none">
     <div class="wrapper">
-        <p>Designed and Written by <a href="mailto:forrestchang7@gmail.com">Jiayuan Zhang</a></p>
+        <p>Contact Me : <a href="mailto:jianweiao@foxmail.com">AliMaster</a></p>
     </div>
 </footer>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_SVG-full"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
 
